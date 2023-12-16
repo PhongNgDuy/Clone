@@ -41,10 +41,11 @@ public class Journey extends StationManage {
                 if (tmp.get(0).equals(path.get(0)) && tmp.get(tmp.size() - 1).equals(path.get(size - 1))) {
                     Map<Bus, LinkedList<Station>> map = new HashMap<>();
                     map.put(i, tmp);
+
                     if (size < path.size()) {
                         for (Bus j : getJourneys().keySet()) {
                             LinkedList<Station> tmp2 = getJourneys().get(j);
-                            if (tmp2.get(tmp2.size() - 1).equals(path.get(path.size() - 1)) && tmp2.size() >= size) {
+                            if (tmp2.get(tmp2.size() - 1).equals(path.get(path.size() - 1)) && tmp2.size() >= path.size()-size) {
                                 LinkedList<Station> stations = new LinkedList<>();
                                 stations.add(path.get(size - 1));
                                 stations.add(path.get(path.size() - 1));
@@ -52,6 +53,7 @@ public class Journey extends StationManage {
                             }
                         }
                     }
+
                     optimalJourney.add(map);
                 }
             }

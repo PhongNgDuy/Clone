@@ -28,7 +28,11 @@ public class Main extends JFrame {
     private JComboBox<String> comboMapType;
     private data.JXMapViewerCustom jXMapViewer;
     private final Set<MyWaypoint> waypoints = new HashSet<>();
+    private final Set<MyWaypoint> waypointsClone = new HashSet<>();
     private List<RoutingData> routingData = new ArrayList<>();
+
+    JLabel label = new JLabel("Gia tien");
+    private double total=0;
 
     private void init() {
         TileFactoryInfo info = new OSMTileFactoryInfo();
@@ -48,9 +52,9 @@ public class Main extends JFrame {
 
     private void initPoints() {
         WaypointPainter<MyWaypoint> wp = new WaypointRender();
-        wp.setWaypoints(waypoints);
+        wp.setWaypoints(waypointsClone);
         jXMapViewer.setOverlayPainter(wp);
-        for (MyWaypoint d : waypoints) {
+        for (MyWaypoint d : waypointsClone) {
             jXMapViewer.add(d.getButton());
         }
     }
@@ -90,14 +94,15 @@ public class Main extends JFrame {
 //        for (MyWaypoint d : waypoints) {
 //            jXMapViewer.remove(d.getButton());
 //        }
-//        Iterator<MyWaypoint> iter = waypoints.iterator();
-//        while (iter.hasNext()) {
-//            if (iter.next().getPointType() == waypoint.getPointType()) {
-//                iter.remove();
-//            }
-//        }
+        Iterator<MyWaypoint> iter = waypoints.iterator();
+        while (iter.hasNext()) {
+            if (iter.next().getPointType() == waypoint.getPointType()) {
+                iter.remove();
+            }
+        }
 
         waypoints.add(waypoint);
+        waypointsClone.add(waypoint);
         initWaypoint();
     }
 
@@ -124,14 +129,8 @@ public class Main extends JFrame {
                 comboMapTypeActionPerformed(evt);
             }
         });
-
-        cmdAdd.setText("Add Waypoint");
-        cmdAdd.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-                cmdAddActionPerformed(evt);
-            }
-        });
-
+        JPanel jPanel = new JPanel();
+        jPanel.add(label);
         GroupLayout jXMapViewerLayout = new GroupLayout(jXMapViewer);
         jXMapViewer.setLayout(jXMapViewerLayout);
         jXMapViewerLayout.setHorizontalGroup(
@@ -139,22 +138,26 @@ public class Main extends JFrame {
                         .addGroup(GroupLayout.Alignment.TRAILING, jXMapViewerLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(cmdAdd)
+                                .addComponent(jPanel,120,140,160)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 767, Short.MAX_VALUE)
                                 .addComponent(comboMapType, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())
+
         );
         jXMapViewerLayout.setVerticalGroup(
                 jXMapViewerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(jXMapViewerLayout.createSequentialGroup()
                                 .addContainerGap()
+
                                 .addGroup(jXMapViewerLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(comboMapType, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(cmdAdd))
+                                .addComponent(jPanel,20,40,40)
                                 .addContainerGap(632, Short.MAX_VALUE))
         );
-
         GroupLayout layout = new GroupLayout(getContentPane());
+
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -171,6 +174,12 @@ public class Main extends JFrame {
                                 .addGap(0, 0, 0))
         );
 
+        cmdAdd.setText("Add Waypoint");
+        cmdAdd.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                cmdAddActionPerformed(evt);
+            }
+        });
         pack();
         setLocationRelativeTo(null);
     }
@@ -193,21 +202,24 @@ public class Main extends JFrame {
 
     private void cmdAddActionPerformed(ActionEvent evt) {
         StationManage stationManage = new StationManage();
-        Journey journey = new Journey(stationManage.stationMap.get("Ben xe Gia Lam"),stationManage.stationMap.get("Ben xe Yen Nghia"));
+        Journey journey = new Journey(stationManage.stationMap.get("Ben xe Yen Nghia"),stationManage.stationMap.get("Ben xe Gia Lam"));
 
         for (Bus bus : journey.getOptimalJourney().get(0).keySet()) {
             LinkedList<Station> stations = journey.getOptimalJourney().get(0).get(bus);
+            total+=bus.price;
             System.out.println(bus.id);
             for (Station i : stations) {
                 System.out.println(i.address);
+            }
+            for (int i = 1; i < stations.size() - 1; i++) {
+                addWaypoint(new MyWaypoint(stations.get(i).address,event,stations.get(i).location));
             }
             addWaypoint(new MyWaypoint(stations.get(0).address,MyWaypoint.PointType.START, event, stations.get(0).location ));
             size=2;
             addWaypoint(new MyWaypoint(stations.get(stations.size()-1).address,MyWaypoint.PointType.END, event, stations.get(stations.size()-1).location ));
         }
+        label.setText("Thanh tien: "+total);
         initPoints();
-//        addWaypoint(new MyWaypoint(journey.getPath().get(0).address,MyWaypoint.PointType.START, event, journey.getPath().get(0).location ));
-//        addWaypoint(new MyWaypoint(journey.getPath().get(1).address,MyWaypoint.PointType.END, event, journey.getPath().get(1).location ));
     }
 
     public Main() {
