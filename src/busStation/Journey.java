@@ -1,4 +1,4 @@
-package src.busStation;
+package busStation;
 
 import graph.Node;
 

@@ -1,4 +1,4 @@
-package src.waypoint;
+package waypoint;
 
 import javax.swing.*;
 import java.awt.*;

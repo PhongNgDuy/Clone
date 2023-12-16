@@ -1,4 +1,4 @@
-package src.waypoint;
+package waypoint;
 
 import org.jxmapviewer.JXMapViewer;
 import org.jxmapviewer.viewer.WaypointPainter;

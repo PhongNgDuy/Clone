@@ -1,4 +1,4 @@
-package src.data;
+package data;
 
 import com.graphhopper.util.shapes.GHPoint3D;
 import org.jxmapviewer.JXMapViewer;

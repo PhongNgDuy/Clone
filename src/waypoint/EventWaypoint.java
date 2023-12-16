@@ -1,4 +1,4 @@
-package src.waypoint;
+package waypoint;
 
 public interface EventWaypoint {
 

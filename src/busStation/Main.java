@@ -1,4 +1,4 @@
-package src.busStation;
+package busStation;
 
 import data.JXMapViewerCustom;
 import data.RoutingData;
@@ -26,7 +26,7 @@ public class Main extends JFrame {
     private EventWaypoint event;
     static JButton cmdAdd = new JButton();
     private JComboBox<String> comboMapType;
-    private data.JXMapViewerCustom jXMapViewer;
+    private JXMapViewerCustom jXMapViewer;
     private final Set<MyWaypoint> waypoints = new HashSet<>();
     private final Set<MyWaypoint> waypointsClone = new HashSet<>();
     private List<RoutingData> routingData = new ArrayList<>();

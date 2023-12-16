@@ -1,4 +1,4 @@
-package src.busStation;
+package busStation;
 
 public class Bus {
     String id;

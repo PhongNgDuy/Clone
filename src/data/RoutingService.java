@@ -1,4 +1,4 @@
-package src.data;
+package data;
 
 import com.graphhopper.GHRequest;
 import com.graphhopper.GHResponse;
