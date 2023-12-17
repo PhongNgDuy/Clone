@@ -24,4 +24,5 @@ public class Station extends JXMapViewer {
     public LinkedList<Bus> getBus() {
         return bus;
     }
+
 }

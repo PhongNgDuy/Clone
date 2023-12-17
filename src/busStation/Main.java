@@ -100,9 +100,6 @@ public class Main extends JFrame {
     }
 
     private void addWaypoint(MyWaypoint waypoint) {
-//        for (MyWaypoint d : waypoints) {
-//            jXMapViewer.remove(d.getButton());
-//        }
         Iterator<MyWaypoint> iter = waypoints.iterator();
         while (iter.hasNext()) {
             if (iter.next().getPointType() == waypoint.getPointType()) {
@@ -111,7 +108,6 @@ public class Main extends JFrame {
         }
 
         waypoints.add(waypoint);
-//        waypointsClone.add(waypoint);
         initWaypoint();
     }
 
@@ -185,7 +181,7 @@ public class Main extends JFrame {
                         .addGroup(GroupLayout.Alignment.TRAILING, jXMapViewerLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(cmdAdd)
-                                .addComponent(jPanel, 120, 140, 200)
+                                .addComponent(jPanel, 120, 450, 500)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 767, Short.MAX_VALUE)
                                 .addComponent(comboMapType, GroupLayout.PREFERRED_SIZE, 184, GroupLayout.PREFERRED_SIZE)
@@ -203,8 +199,8 @@ public class Main extends JFrame {
                                         .addComponent(comboMapType, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(selectStartStation, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(selectEndStation, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(cmdAdd))
-                                .addComponent(jPanel, 20, 40, 40)
+                                        .addComponent(cmdAdd)
+                                        .addComponent(jPanel, 20, 40, 40))
                                 .addContainerGap(632, Short.MAX_VALUE))
 
         );
@@ -226,7 +222,7 @@ public class Main extends JFrame {
                                 .addGap(0, 0, 0))
         );
 
-        cmdAdd.setText("Add Waypoint");
+        cmdAdd.setText("Get Bus Journey Option");
         cmdAdd.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 cmdClearActionPerformed(evt);
@@ -278,29 +274,29 @@ public class Main extends JFrame {
         routingData.clear();
         StationManage stationManage = new StationManage();
         Journey journey = new Journey(stationManage.stationMap.get(start), stationManage.stationMap.get(end));
+
         for (Station station : journey.path) {
             waypointsClone.add(new MyWaypoint(station.address, event, station.location));
         }
+
         for (Bus bus : journey.getOptimalJourney().keySet()) {
             busCheck = 1;
             this.bus = bus;
             LinkedList<Station> stations = journey.getOptimalJourney().get(bus);
+
             total += bus.price;
+
             System.out.println(bus.id);
             for (Station i : stations) {
                 System.out.println(i.address);
             }
+
             for (int i = 0; i < stations.size() - 1; i++) {
                 addWaypoint(new MyWaypoint(stations.get(i).address, MyWaypoint.PointType.START, event, stations.get(i).location));
                 size = 2;
                 addWaypoint(new MyWaypoint(stations.get(i).address, MyWaypoint.PointType.END, event, stations.get(i + 1).location));
                 busCheck = 0;
             }
-//            size=0;
-//            addWaypoint(new MyWaypoint(stations.get(0).address,MyWaypoint.PointType.START, event, stations.get(0).location ));
-//            size=2;
-//            addWaypoint(new MyWaypoint(stations.get(stations.size()-1).address,MyWaypoint.PointType.END, event, stations.get(stations.size()-1).location ));
-
         }
         label.setText("Thanh tien: " + String.format("%d.000 vnd", total));
         total=0;

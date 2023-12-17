@@ -8,7 +8,6 @@ public class Journey extends StationManage {
     Node<Station> start;
     Node<Station> end;
     List<Station> path;
-    double totalPrice;
 
     public Journey(Node<Station> start, Node<Station> end) {
         this.start = start;

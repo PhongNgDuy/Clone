@@ -21,13 +21,8 @@ public class JXMapViewerCustom extends JXMapViewer {
     }
 
     public void setRoutingData(List<RoutingData> routingData, Bus bus) {
-        this.routingData = routingData;
+//        this.routingData = routingData;
         if (!routingDataList.contains(routingData)) routingDataList.add(routingData);
-//        routingDataMap.put(bus,routingData);
-//        if (!busColorMap.containsKey(bus)) busColorMap.put(bus, 1);
-//        else {
-//            busColorMap.put(bus, busColorMap.get(bus) + 1);
-//        }
         repaint();
         if (buses.contains(bus)) colors.add(color);
         else {
