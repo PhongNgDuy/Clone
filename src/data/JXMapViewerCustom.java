@@ -32,14 +32,14 @@ public class JXMapViewerCustom extends JXMapViewer {
         if (buses.contains(bus)) colors.add(color);
         else {
             buses.add(bus);
-            color=new Color((color1 += 110) % 162, (color2 += 50) % 162, (color3 += 50) % 245);
+            color=new Color((color1 +=40) % 160, (color2 += 50) % 120, (color3 += 40) % 100);
             colors.add(color);
         }
     }
 
-    int color1 = 34;
-    int color2 = 57;
-    int color3 = 162;
+    int color1 = 64;
+    int color2 = 112;
+    int color3 = 152;
     private Color color = new Color(color1, color2, color3);
 //    private Bus bus;
 //    private Map<Bus, Integer> busColorMap = new HashMap<>();
@@ -63,7 +63,7 @@ public class JXMapViewerCustom extends JXMapViewer {
                     draw(p2, d);
                 }
                 g2.setColor(colors.get(i));
-//                g2.setColor(new Color(255, 255, 255));
+//                g2.setColor(new Color(64, 112, 152));
                 g2.setStroke(new BasicStroke(5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
                 g2.draw(p2);
                 g2.dispose();
@@ -71,6 +71,9 @@ public class JXMapViewerCustom extends JXMapViewer {
         }
     }
 
+    public void clear() {
+        routingDataList.clear();
+    }
     private boolean first = true;
 
     private void draw(Path2D p2, RoutingData d) {

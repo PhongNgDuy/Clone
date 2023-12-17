@@ -3,7 +3,7 @@ package busStation;
 public class Bus {
     String id;
     String name;
-    final double price=7;
+    final int price=7;
     double speed;
 
     public Bus(String id,String name) {

@@ -3,10 +3,7 @@ package busStation;
 public class Test {
     public static void main(String[] args) {
         StationManage stationManage = new StationManage();
-//        stationManage.insertBus();
-//        stationManage.insertStation();
-//        stationManage.insertWay();
-        Journey journey = new Journey(stationManage.stationMap.get("Ben xe Yen Nghia"),stationManage.stationMap.get("Ben xe Gia Lam"));
+        Journey journey = new Journey(stationManage.stationMap.get("Ben xe Nuoc Ngam"),stationManage.stationMap.get("Ben xe Gia Lam"));
         for (Station i : journey.getPath()) {
             System.out.println(i.address);
         }
