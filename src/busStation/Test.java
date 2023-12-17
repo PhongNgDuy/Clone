@@ -1,14 +1,12 @@
 package busStation;
 
-import java.util.Map;
-
 public class Test {
     public static void main(String[] args) {
         StationManage stationManage = new StationManage();
 //        stationManage.insertBus();
 //        stationManage.insertStation();
 //        stationManage.insertWay();
-        Journey journey = new Journey(stationManage.stationMap.get("Ben xe Gia Lam"),stationManage.stationMap.get("Ben xe Yen Nghia"));
+        Journey journey = new Journey(stationManage.stationMap.get("Ben xe Yen Nghia"),stationManage.stationMap.get("Ben xe Gia Lam"));
         for (Station i : journey.getPath()) {
             System.out.println(i.address);
         }
@@ -21,11 +19,15 @@ public class Test {
             System.out.println();
         }
 
-        for (Bus bus : journey.getOptimalJourney().get(0).keySet()) {
+        for (Bus bus : journey.getOptimalJourney().keySet()) {
             System.out.println(bus.id);
-            for (Station station : journey.getOptimalJourney().get(0).get(bus)) {
+            for (Station station : journey.getOptimalJourney().get(bus)) {
                 System.out.println(station.address);
             }
         }
+    }
+    public Journey getTest() {
+        StationManage stationManage = new StationManage();
+        return new Journey(stationManage.stationMap.get("Ben xe Yen Nghia"),stationManage.stationMap.get("Ben xe Gia Lam"));
     }
 }

@@ -32,33 +32,21 @@ public class Journey extends StationManage {
         return journey;
     }
 
-    public LinkedList<Map<Bus, LinkedList<Station>>> getOptimalJourney() {
-        LinkedList<Map<Bus, LinkedList<Station>>> optimalJourney = new LinkedList<>();
-        int size = path.size();
-        while (size > 0) {
-            for (Bus i : getJourneys().keySet()) {
-                LinkedList<Station> tmp = getJourneys().get(i);
-                if (tmp.get(0).equals(path.get(0)) && tmp.get(tmp.size() - 1).equals(path.get(size - 1))) {
-                    Map<Bus, LinkedList<Station>> map = new HashMap<>();
-                    map.put(i, tmp);
 
-                    if (size < path.size()) {
-                        for (Bus j : getJourneys().keySet()) {
-                            LinkedList<Station> tmp2 = getJourneys().get(j);
-                            if (tmp2.get(tmp2.size() - 1).equals(path.get(path.size() - 1)) && tmp2.size() >= path.size()-size) {
-                                LinkedList<Station> stations = new LinkedList<>();
-                                stations.add(path.get(size - 1));
-                                stations.add(path.get(path.size() - 1));
-                                map.put(j, stations);
-                            }
-                        }
-                    }
-
-                    optimalJourney.add(map);
+    public Map<Bus,LinkedList<Station>> getOptimalJourney() {
+        Map<Bus,LinkedList<Station>> optimalOption=new HashMap<>();
+        for (Bus bus1 : getJourneys().keySet()) {
+            optimalOption.put(bus1,getJourneys().get(bus1));
+            Bus tmpBus=bus1;
+            for (Bus bus2 : getJourneys().keySet()) {
+                if (getJourneys().get(bus2).containsAll(optimalOption.get(tmpBus))&&!bus1.equals(bus2)) {
+                    optimalOption.remove(tmpBus);
+                    getJourneys().remove(tmpBus);
+                    optimalOption.put(bus2,getJourneys().get(bus2));
+                    tmpBus=bus2;
                 }
             }
-            size--;
         }
-        return optimalJourney;
+        return optimalOption;
     }
 }

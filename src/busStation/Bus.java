@@ -16,4 +16,8 @@ public class Bus {
     public double getPrice() {
         return price;
     }
+
+    public String getId() {
+        return id;
+    }
 }

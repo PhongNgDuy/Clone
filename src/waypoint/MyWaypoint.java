@@ -1,5 +1,6 @@
 package waypoint;
 
+import busStation.Bus;
 import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -46,6 +47,12 @@ public class MyWaypoint extends DefaultWaypoint {
         initButton(event);
     }
 
+    public MyWaypoint(Bus bus, EventWaypoint event, GeoPosition coord) {
+        super(coord);
+        this.name="Bus "+bus.getId();
+        initBusButton(event);
+    }
+
     public MyWaypoint() {
     }
 
@@ -63,6 +70,15 @@ public class MyWaypoint extends DefaultWaypoint {
         });
     }
 
+    private void initBusButton(EventWaypoint event) {
+        button=new BusWaypoint();
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    event.selected(MyWaypoint.this);
+            }
+        });
+    }
     public static enum PointType {
         START, END
     }

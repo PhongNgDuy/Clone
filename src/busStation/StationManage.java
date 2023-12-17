@@ -32,12 +32,14 @@ public class StationManage {
         Station station = new Station(21.019550, 105.937141);
         station.setAddress("Ben xe Gia Lam");
         station.getBus().add(busMap.get("03"));
+        station.getBus().add(busMap.get("01"));
         station.getBus().add(busMap.get("11"));
         stations.add(station);
 
         station = new Station(20.954930, 105.733580);
         station.setAddress("Ben xe Yen Nghia");
         station.getBus().add(busMap.get("15"));
+        station.getBus().add(busMap.get("01"));
         stations.add(station);
 
         station = new Station(20.985240, 105.844040);
@@ -60,11 +62,12 @@ public class StationManage {
     }
 
     public void insertWay() {
-        stationMap.get("Ben xe Giap Bat").addDestination(stationMap.get("Ben xe Nuoc Ngam"), 2000);
+        stationMap.get("Ben xe Gia Lam").addDestination(stationMap.get("Ben xe Nuoc Ngam"), 2000);
 
         stationMap.get("Ben xe Giap Bat").addDestination(stationMap.get("Ben xe Gia Lam"),300);
 
         stationMap.get("Ben xe Yen Nghia").addDestination(stationMap.get("Ben xe Nuoc Ngam"),400);
+        stationMap.get("Ben xe Yen Nghia").addDestination(stationMap.get("Ben xe Giap Bat"),500);
 
     }
 

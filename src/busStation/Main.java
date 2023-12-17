@@ -1,5 +1,6 @@
 package busStation;
 
+import com.graphhopper.util.shapes.GHPoint3D;
 import data.JXMapViewerCustom;
 import data.RoutingData;
 import data.RoutingService;
@@ -9,9 +10,11 @@ import waypoint.MyWaypoint;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
+import java.util.List;
 
 import waypoint.WaypointRender;
 import org.jxmapviewer.OSMTileFactoryInfo;
@@ -29,8 +32,10 @@ public class Main extends JFrame {
     private JXMapViewerCustom jXMapViewer;
     private final Set<MyWaypoint> waypoints = new HashSet<>();
     private final Set<MyWaypoint> waypointsClone = new HashSet<>();
+    private final Set<MyWaypoint> busWaypoints = new HashSet<>();
     private List<RoutingData> routingData = new ArrayList<>();
-
+    private int busCheck=0;
+    private Bus bus;
     JLabel label = new JLabel("Gia tien");
     private double total=0;
 
@@ -57,16 +62,10 @@ public class Main extends JFrame {
         for (MyWaypoint d : waypointsClone) {
             jXMapViewer.add(d.getButton());
         }
+
     }
     private int size=0;
     private void initWaypoint() {
-//        WaypointPainter<MyWaypoint> wp = new WaypointRender();
-//        wp.setWaypoints(waypoints);
-//        jXMapViewer.setOverlayPainter(wp);
-//        for (MyWaypoint d : waypoints) {
-//            jXMapViewer.add(d.getButton());
-//        }
-
         if (/*waypoints.size()*/size == 2) {
             GeoPosition start = null;
             GeoPosition end = null;
@@ -78,16 +77,17 @@ public class Main extends JFrame {
                 }
             }
             if (start != null && end != null) {
-                System.out.println(waypoints.size());
                 routingData = RoutingService.getInstance().routing(start.getLatitude(), start.getLongitude(), end.getLatitude(), end.getLongitude());
-//                waypoints.clear();
                 size=0;
+                if (busCheck==1) {
+                    GHPoint3D busPoint = routingData.get(routingData.size() / 2).getPointList().get(routingData.get(routingData.size() / 2).getPointList().size() / 2);
+                    waypointsClone.add(new MyWaypoint(bus,event,new GeoPosition(busPoint.lat,busPoint.lon)));
+                }
             }
             else {
                 routingData.clear();
             }
-
-            jXMapViewer.setRoutingData(routingData);
+            jXMapViewer.setRoutingData(routingData,bus);
         }
     }
     private void addWaypoint(MyWaypoint waypoint) {
@@ -102,7 +102,7 @@ public class Main extends JFrame {
         }
 
         waypoints.add(waypoint);
-        waypointsClone.add(waypoint);
+//        waypointsClone.add(waypoint);
         initWaypoint();
     }
 
@@ -203,20 +203,29 @@ public class Main extends JFrame {
     private void cmdAddActionPerformed(ActionEvent evt) {
         StationManage stationManage = new StationManage();
         Journey journey = new Journey(stationManage.stationMap.get("Ben xe Yen Nghia"),stationManage.stationMap.get("Ben xe Gia Lam"));
-
-        for (Bus bus : journey.getOptimalJourney().get(0).keySet()) {
-            LinkedList<Station> stations = journey.getOptimalJourney().get(0).get(bus);
+        for (Station station : journey.path) {
+            waypointsClone.add(new MyWaypoint(station.address,event,station.location));
+        }
+        for (Bus bus : journey.getOptimalJourney().keySet()) {
+            busCheck=1;
+            this.bus=bus;
+            LinkedList<Station> stations = journey.getOptimalJourney().get(bus);
             total+=bus.price;
             System.out.println(bus.id);
             for (Station i : stations) {
                 System.out.println(i.address);
             }
-            for (int i = 1; i < stations.size() - 1; i++) {
-                addWaypoint(new MyWaypoint(stations.get(i).address,event,stations.get(i).location));
+            for (int i = 0; i < stations.size() - 1; i++) {
+                addWaypoint(new MyWaypoint(stations.get(i).address,MyWaypoint.PointType.START,event,stations.get(i).location));
+                size=2;
+                addWaypoint(new MyWaypoint(stations.get(i).address,MyWaypoint.PointType.END,event,stations.get(i+1).location));
+                busCheck=0;
             }
-            addWaypoint(new MyWaypoint(stations.get(0).address,MyWaypoint.PointType.START, event, stations.get(0).location ));
-            size=2;
-            addWaypoint(new MyWaypoint(stations.get(stations.size()-1).address,MyWaypoint.PointType.END, event, stations.get(stations.size()-1).location ));
+//            size=0;
+//            addWaypoint(new MyWaypoint(stations.get(0).address,MyWaypoint.PointType.START, event, stations.get(0).location ));
+//            size=2;
+//            addWaypoint(new MyWaypoint(stations.get(stations.size()-1).address,MyWaypoint.PointType.END, event, stations.get(stations.size()-1).location ));
+
         }
         label.setText("Thanh tien: "+total);
         initPoints();
